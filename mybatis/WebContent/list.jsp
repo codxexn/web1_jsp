@@ -1,0 +1,48 @@
+<%@page import="com.app.vo.ProductVO"%>
+<%@page import="java.util.List"%>
+<%@page import="com.app.dao.ProductDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>상품 목록</title>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>상품 번호</th>
+			<th>상품명</th>
+			<th>상품가격</th>
+			<th>상품재고</th>
+		</tr>
+		<%
+			ProductDAO productDAO = new ProductDAO();
+			List<ProductVO> products = productDAO.selectAll();
+			for(int i=0; i<products.size(); i++){
+		%>
+			<tr>
+				<td><%=products.get(i).getId() %></td>			
+				<td><a href="read.jsp?id=<%=products.get(i).getId()%>"><%=products.get(i).getProductName() %></a></td>			
+				<td><%=products.get(i).getProductPrice() %></td>			
+				<td><%=products.get(i).getProductStock() %></td>			
+			</tr>
+		<%
+			}
+		%>
+	</table>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
