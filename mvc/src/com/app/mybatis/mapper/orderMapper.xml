@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="order">
+	<insert id="insert">
+		insert into tbl_order(product_id, member_id, product_count)
+		values(#{productId}, #{memberId}, #{productCount})
+	</insert>
+	
+	<select id="select" resultType="orderDTO">
+		select o.id, product_id, product_name, product_price, member_id, 
+		product_count, member_name, product_count * product_price total_price
+		from tbl_member m
+		join tbl_order o
+		on o.member_id = m.id
+		join tbl_product p
+		on o.product_id = p.id
+		and m.id = #{memberId}
+		order by o.id desc
+	</select>
+	
+	<select id="selectById" resultType="_int">
+		select product_count from tbl_order
+		where id = #{id}
+	</select>
+	
+	<delete id="delete">
+		delete from tbl_order
+		where id = #{id}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
