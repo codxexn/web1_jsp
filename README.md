@@ -305,7 +305,7 @@ comcat(welcome 파일)
 
 <br>
 
-📌 어떤 경로를 요청해야 저 서블릿을 실행할까? ➡️ **<url-pattern>**
+📌 어떤 경로를 요청해야 저 서블릿을 실행할까? ➡️ **< url-pattern >**
 ```java
 <servlet-mapping>
   	<servlet-name>Home</servlet-name>
