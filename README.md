@@ -181,12 +181,136 @@ if(리턴값 == null){
 ➡️ Java 코드는 Servlet(서블릿)에 몰아넣고 실질적으로 연산이 필요한 건 JSP에서!  
 ➡️ JSP에서 Java 코드를 쓰는 건: 받은 데이터를 반복 돌려서 뿌릴 때  
 
-<br>
+<br><br>
 
 ## 📝 Day02
 > ### JSP: Java Server Page(html): 웹언어
+- 웹서버에서 요청을 받고 동적데이터 처리가 필요한 건 웹컨테이너(서블릿 컨테이너)로 보냄
+	- (서블릿을 메모리에 할당해달라고 WAS(Tomcat)에게 요청)
+- WAS에서 서블릿을 메모리에 할당한다. web.xml 참조한 후 알맞은 서블릿에 대한 Thread를 생성하고 req, resp 객체 생성후 서블릿에 전달
+	- (연산 종료되면 서블릿을 메모리에서 해제시켜준다.)
+- 서블릿에서 연산을 함
+- 요청에 대한 응답페이지가 있어야 하는 경우 ➡️ 서블릿에서 응답페이지 작성이 가능하지만 불편하다.
+- 따라서 요청에 대한 응답페이지를 작성하는 건 JSP
+- 받은 데이터를 반복해서 뿌려야 할 땐 JSP에서 자바코드 사용
+- 서블릿을 통해서 연산을 한 다음 JSP로 넘겨준다.
 
+<br>
 
+> ### 웹 서버(http) - 아파치
+사용자의 요청이 정적 데이터인지 동적 데이터인지 판단한다.  
+정적 데이터일 경우 이미 준비된 HTML문서를 그대로 응답해주며,  
+동적 데이터라면 (서블릿을 메모리에 할당해달라고 WAS에 요청) 웹 컨테이너에 요청을 보낸다.
+
+<br>
+
+> ### 웹 컨테이너(서블릿 컨테이너)
+동적 데이터일 경우 JSP, 서블릿으로 연산 및 제어 그리고 DB까지 접근한다.  
+DB에 접근하는 연산을 복잡한 연산이라고 하며, JAVA로 처리한다.  
+동적 데이터가 정제된 데이터(정적 데이터)로 완성되면 이를 웹 서버로 전달해준다.  
+
+<br>
+
+> ### WAS(Web Application Server) - Tomcat
+동적 데이터를 처리할 서블릿을 메모리에 할당하며,  
+web.xml(- 요청에 대한 경로를 설정해주는 것)을 참조한 뒤   
+알맞는 서블릿에 대한 Thread를 생성한다.  
+- 자바는 멀티쓰레드, JS는 싱글쓰레드
+  
+서블릿 요청과 서블릿 응답 객체 생성 후 서블릿에 전달하면, 연산 종료 후 메모리에서 해제시킨다.  
+
+[리눅스에서 배포할 때는 아파치/톰캣 따로, 로컬에서는 함께 돼 있다.]
+
+<br>
+
+> ### 서블릿(Servlet)
+Java 코드 안에 HTML 코드를 작성할 수 있는 Java 프로그램이다.  
+Thread에 의해 서블릿에 있는 service() 메소드가 호출된다.  
+전송 방식 요청에 맞게 doGet() 또는 doPost()등의 메소드를 호출한다.  
+
+<br>
+
+> ### MVC 패턴(Model, View, Controller)
+JSP 파일에 자바코드를 넣는 게 아니라 자바코드를 다 분리해서 설계해놓는 방식
+
+<br>
+
+> ### web.xml: 요청에 대한 경로를 설정 및 관리
+> 사용자가 news라고 요청하면 이걸 처리할 수 있는 .java(서블릿) 파일로 가야 한다. 
+> 그 경로를 설정하고 관리해주는 곳이 web.xml 이다.
+
+<br>
+
+따라서 요청을 보내면 우선 web.xml 부터 가서 확인 후에  
+WAS에서 Thread를 생성하고  
+Thread가 해당 부분을 Start해주면 메모리에 올라간 뒤  
+자바는 멀티쓰레드이기 때문에 쓰레드객체가 먼저 생성이 돼야 서블릿을 메모리에 올릴 수 있다.  
+⬇️  
+해당 서블릿으로 이동한다.  
+Thread에 의해 서블릿에 있는 service() 메소드가 호출되며 전송방식 요청에 맞게 doGet() , doPost() 등의 메소드를 호출한다.
+
+<br>
+
+📌 일반 클래스로 생성을 했는데 servlet으로 만들어주고 싶으면 직접 extends를 해주어야 한다.  
+➡️ Superclass의 경로: javax.servlet.http.HttpServlet
+
+```java
+@WebServlet("/home")
+public class MyServlet extends HttpServlet {
+
+}
+```
+- mapping 해줌, 사용자가 /home을 요청하면 이 servlet이 메모리에 올라감
+- 근데 하나당 하나로 설정하면 유지보수하는데 힘드니까 관리를 web.xml에서 하겠다는 것
+
+```java
+private static final long serialVersionUID = 1L;
+```
+- serialVersionUID -> 직렬화, 역직렬화를 이해해야 함
+  
+<br>
+
+> ### 직렬화 작업한 것의 고유값 ➡️ serialVersionUID
+데이터 저장처럼 객체를 저장해도 그 저장공간을 주소값을 저장하게 되는데 전원을 껐다켜면 바뀌어 있고 사용자마다 주소값이 다르기 때문에 참조하기가 힘들다.  
+따라서, 해당 **객체에 있는 필드를 json, xml 로 변환해서 서버에 저장**해놓는 게 **직렬화**라는 작업  
+**직렬화해놓은 객체를 다시 원본 객체에 new해서 그곳의 데이터를 새롭게 담아주는 작업 ➡️ 역직렬화**  
+```java
+response.getWriter().append("Served at: ").append(request.getContextPath());
+```
+- response 객체의 getWriter() 메소드를 불러서 append(연결)해주면 <body> 태그 안에 "Served at: "가 작성된다.
+- request.getContextPath()의 값이 또 연결돼서 붙는다.
+
+<br>
+
+- ContextPath(): 시작 경로
+comcat(welcome 파일)  
+➡️ ip + 포트번호만 넣어도 내가 원하는 초기화면이 보일 수 있게 웰컴파일의 index.html을 함. root경로  
+➡️ 부모경로 (/만 해도 메인이 나오게 설정하는 것)  
+
+<br>
+
+> ### web.xml 경로 관리 상세 예시
+> WebContent - WEB-INF - web.xml (경로에 대한 것을 정리, 관리하는 파일)
+
+```java
+<servlet>
+  	<servlet-name>Home</servlet-name>
+  	<servlet-class>com.app.servlet.MyServlet</servlet-class>
+</servlet>
+```
+📌 텍스트대치나 마찬가지!  
+- Home 이라고 쓰면 com.app.servlet.MyServlet 이렇게 쓰는 거나 똑같음
+
+<br>
+
+📌 어떤 경로를 요청해야 저 서블릿을 실행할까?
+```java
+<servlet-mapping>
+  	<servlet-name>Home</servlet-name>
+  	<url-pattern>/home</url-pattern>
+</servlet-mapping>
+```
+- /home을 요청하면 Home(com.app.servlet.MyServlet)을 실행하겠다.
 
 
 
