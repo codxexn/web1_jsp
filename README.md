@@ -299,11 +299,13 @@ comcat(welcome 파일)
 </servlet>
 ```
 📌 텍스트대치나 마찬가지!  
+- 이름: Home
+- 문구: com.app.servlet.MyServlet
 - Home 이라고 쓰면 com.app.servlet.MyServlet 이렇게 쓰는 거나 똑같음
 
 <br>
 
-📌 어떤 경로를 요청해야 저 서블릿을 실행할까?
+📌 어떤 경로를 요청해야 저 서블릿을 실행할까? ➡️ **<url-pattern>**
 ```java
 <servlet-mapping>
   	<servlet-name>Home</servlet-name>
