@@ -314,14 +314,79 @@ comcat(welcome 파일)
 ```
 - /home을 요청하면 Home(com.app.servlet.MyServlet)을 실행하겠다.
 
+<br>
 
+> #### 확장자: 경로 관리를 위해 보안상 응답한 경로가 아니라 요청한 경로가 보이도록 설정한다.
+> 경로 관리를 위해 보안상 응답한 경로가 아니라 요청한 경로가 보이도록 설정한다.  
+> 예) 확장자가 *.post 로 끝나면 게시글 관련됐다는 의미
 
+관련된 서비스를 한 servlet에 모아둔다.  
+따라서 getUrl로 사용자가 요청한 url 문자열로 가지고 와서 split을 이용해서 0번째 방을 가지고 오면 .전의 값을 가지고 올 수 있다.  
+if/ switch를 이용해서 분류 ➡️ url 나눠줌  
 
+<br>
 
+----
 
+<br>
 
+```java
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getParameter("name");
+		PrintWriter out = response.getWriter(); // response.getWriter(); return 타입은 PrintWriter
+		out.print("<h1><mark>Hello Servlet!</mark></h1>"); // 객체에 print() 라는 메소드가 있고 () 안의 값이 <body>에 작성된다.
+		out.close(); // flush
+	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+```
+- doPost를 실행하면 doGet이 실행되기 때문에 구분이 없이 doGet이 실행되게끔 돼 있다.
+- Post, Get 구분은 Spring 때 진행한다.
+➡️ 한 곳에서 코드 구현  
+➡️ 다른 한 메소드는 사용  
 
+```java
+<form action ="home" method="get">	
+		<input name="name" placeholder="이름을 입력하세요.">
+		<button>완료</button>
+```
+- <%//action= 어디로 갈래? get이 default %>
+- default 가 submit이라 바로 action으로 감
+- action에 /home 이 아니라 home을 작성하는 이유는?
+	- contextpath가 날아간다.
+	- 앞에 /로 시작하면 앞에 다 날아가고 home으로 시작하게 된다
 
+<br>
+
+- /home에 가서 아래 정보를 가지고 get 메소드 실행해줘.
+- /home 은 Home Servlet -> Home 은 com.app.servlet.MyServlet
+- 위 경로에서 doGet 메소드 실행
+- name = "name" key 값이 name 인 것
+- request.getParameter("name"); 요청한 매개변수의 key가 name
+
+```java
+<%/* 
+		button 을 누르면 바로 submit 된다.
+		input 안에 작성된 정보를 가지고 
+		web.xml에서 /home으로 경로 설정한 com.app.servlet.MyServlet 으로 가서
+		doGet 메소드를 실행해라.
+		
+		doGet 메소드는 요청, 응답이라는 두개의 매개변수를 받는다.
+		매개변수 request에는 request.getParameter("name"); 라는 메소드가 있고
+		name 이라는 key를 가진 파라미터를 겟하면 
+		
+		위에 input 태그에 작성된 값(name이라는 key값에 저장된 value)을 가져다준다.
+		그리고 그 밑에 응답하는 코드를 실행해준다.
+		
+		=action에 /home 이 아니라 home을 작성하는 이유는?
+		앞에 / 붙이면 contextpath 날아가고 뒤에 것부터 시작된다.
+		따라서 / 생략
+		*/%>
+```
 
 
