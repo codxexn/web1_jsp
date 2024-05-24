@@ -422,7 +422,9 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 📌 **myBatis라는 프레임워크를 사용해서 자바와 쿼리파일을 분리**   
 ➡️ 그래도 직접 쿼리를 작성해야 하기 때문에 오타 발생률이 높다. 따라서 요즘 강소기업이나 대기업에서 진행하는 프로젝트는 orm 이라는 기술을 사용한다. 직접 쿼리를 치지 않음. 메소드를 쓰면 자동으로 쿼리가 나온다. 메소드를 사용했을 때 어떻게 조인을 걸고 어떻게 참조할 수 있을지 공부해야 함
 
+<br>
 
+> ### My batis
 
 
 
