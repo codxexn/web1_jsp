@@ -326,10 +326,6 @@ if/ switch를 이용해서 분류 ➡️ url 나눠줌
 
 <br>
 
-----
-
-<br>
-
 ```java
 protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getParameter("name");
@@ -388,5 +384,49 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 		따라서 / 생략
 		*/%>
 ```
+
+<br>
+
+📌 **정리**
+- 서블릿에서 사용자가 받은 값으로 해야할 것들을 doGet, doPost 재정의
+- web.xml에 경로 정리 및 관리
+- jsp에서 사용자에게 요청받을 화면 작성
+- 실제로 사용자에게 값을 입력 받으면
+	- 서블릿에서 받은 값을
+	- doGet, doPost에서 request.getParameter() 로 가지고 와서
+	- setter, getter로 알맞는 쿼리로 CRUD를 한 다음
+	- 리턴해야할 값이 있는지, 없는지 판단
+	- 사용자에게 응답페이지를 서블릿으로 작성을 하던가
+	- 알맞는 html파일로 이동을 시켜준다.
+
+<br>
+
+- request Header: 사용자가 입력한 값을 담아주는 저장공간
+
+- response Header: 응답할 페이지에 무언가를 담아서 전달할 때 쓰는 저장공간, 보통은 페이지를 만들어서 그 페이지를 담아서 전달한다.
+
+<br><br>
+
+## 📝 Day03
+> jdbc 에서 preparedStatement resultSet "" 안에 쿼리작성하는 건 너무 복잡해지기 때문에 "" 안에 쿼리 작성하지 말고 따로 쿼리만 분리해서 모아두는 파일을 만든다.
+
+<br>
+
+> 자바쪽에서 그 파일에 있는 쿼리를 불러와서 실행한다.  
+> 각 쿼리에도 이름을 붙여서 또 담아주면,  
+> 자바파일에서는 그 쿼리이름만 써줘도 자동으로 써진다.  
+> (메소드에 담아주는 것)  
+
+<br>
+
+📌 **myBatis라는 프레임워크를 사용해서 자바와 쿼리파일을 분리**   
+➡️ 그래도 직접 쿼리를 작성해야 하기 때문에 오타 발생률이 높다. 따라서 요즘 강소기업이나 대기업에서 진행하는 프로젝트는 orm 이라는 기술을 사용한다. 직접 쿼리를 치지 않음. 메소드를 쓰면 자동으로 쿼리가 나온다. 메소드를 사용했을 때 어떻게 조인을 걸고 어떻게 참조할 수 있을지 공부해야 함
+
+
+
+
+
+
+
 
 
