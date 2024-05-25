@@ -141,6 +141,23 @@ DB 조회 후에 결과가 resultSet에 담긴다.
 
 이렇게 로그인에 성공을 하면 서블릿이 메모리에 올라가 있을 필요가 없기 때문에 메모리에서 해제가 된다.
 ```
+```java
+ request.getParameter("name");  
+```  
+> 화면에서 입력한 값을 매개변수로 받아줌  
+```java
+<input name="name" placeholder="이름을 입력하세요.">  
+```  
+> name 이라는 변수명에 사용자가 입력한 값을 넣어서 서블릿에 전송해준다. 전송할 때 request 라는 객체에 name:(사용자가 입력한 값) Map구조의 값으로 전달해준다. 따라서 getParameter("name")라는 메소드를 사용하면 key값이 name인 값을 가지고 와서 변수에 담아서 재사용이 가능하다.
+
+<br>
+
+📌 **응답페이지에서 한글 안 깨지게 해주는 코드**
+```java
+response.setContentType("text/html; charset=utf-8");
+```
+
+<br>
 
 보통 로그인을 성공하면 메인이나 다른 페이지로 이동하기 때문에 리턴값이 없다.  
 **서블릿에서 어떤 페이지로 이동할지 설정**할 수 있다.  
@@ -279,13 +296,21 @@ response.getWriter().append("Served at: ").append(request.getContextPath());
 ```
 - response 객체의 getWriter() 메소드를 불러서 append(연결)해주면 <body> 태그 안에 "Served at: "가 작성된다.
 - request.getContextPath()의 값이 또 연결돼서 붙는다.
+- 화면에 Served at: /servlet ➡️ 서블릿은 응답까지 만들어준다.
 
 <br>
 
 - ContextPath(): 시작 경로
 comcat(welcome 파일)  
 ➡️ ip + 포트번호만 넣어도 내가 원하는 초기화면이 보일 수 있게 웰컴파일의 index.html을 함. root경로  
-➡️ 부모경로 (/만 해도 메인이 나오게 설정하는 것)  
+➡️ 부모경로 (/만 해도 메인이 나오게 설정하는 것)
+
+<br>
+
+- getContextPath(): 웰컴경로 재정의 해준 값
+예) www.naver.com/main  
+/main ➡️ / 로 바꿔줌   
+보여지는 것: www.naver.com/  
 
 <br>
 
@@ -318,11 +343,12 @@ comcat(welcome 파일)
 
 > #### 확장자: 경로 관리를 위해 보안상 응답한 경로가 아니라 요청한 경로가 보이도록 설정한다.
 > 경로 관리를 위해 보안상 응답한 경로가 아니라 요청한 경로가 보이도록 설정한다.  
-> 예) 확장자가 *.post 로 끝나면 게시글 관련됐다는 의미
+> .확장자라는 폴더 안에 관리하는 것이나 마찬가지  
+> 예) 확장자가 *.post 로 끝나면 게시글 관련됐다는 의미  
 
 관련된 서비스를 한 servlet에 모아둔다.  
-따라서 getUrl로 사용자가 요청한 url 문자열로 가지고 와서 split을 이용해서 0번째 방을 가지고 오면 .전의 값을 가지고 올 수 있다.  
-if/ switch를 이용해서 분류 ➡️ url 나눠줌  
+📌 **getUrl()**  
+사용자가 요청한 URL을 문자열로 가지고 온 다음 split 으로 0번째 방 것을 가지고 오면 .확장자 앞의 값을 가지고 올 수 있다. 그리고 if, switch 문으로 값에 따른 경로를 지정해준다.
 
 <br>
 
@@ -378,12 +404,10 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 		
 		위에 input 태그에 작성된 값(name이라는 key값에 저장된 value)을 가져다준다.
 		그리고 그 밑에 응답하는 코드를 실행해준다.
-		
-		=action에 /home 이 아니라 home을 작성하는 이유는?
-		앞에 / 붙이면 contextpath 날아가고 뒤에 것부터 시작된다.
-		따라서 / 생략
-		*/%>
 ```
+> action ="home" 은 /home으로 요청하겠다는 의미  
+> "/home"을 적으면 안된다.  
+> ContextPath까지 날아가고 서버 뒤에서 바로 /home으로 시작하기 때문이다. 그냥 home을 적어주어야 ContextPath 뒤에 /해서 home이 붙는다.
 
 <br>
 
@@ -425,6 +449,110 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 <br>
 
 > ### My batis
+
+<br>
+
+> #### Framework: 프레임워크: 작업하기 위한 틀
+> 내가 직접 만들지 않고 누군가가 이미 만들어놓은 것을 사용하는 것  
+> 연동하면 이미 만들어놓은 것들을 가지고 와서 쓸 수 있다.  
+
+<br>
+
+> API도 같은 개념인데  
+> 라이브러리가 모여서 API가 되고  
+> API가 모여서 프레임워크가 된다.  
+> 프레임워크가 가장 큰 규모이다.  
+
+<br>
+
+> #### DBCP: Database Connection Pool: 커넥션만 있는 풀
+> 서버가 실행되자마자 안에 있는 커넥션을 일괄적으로 메모리의 임시영역에 올려둠: 비활성화 상태  
+> getConnection 하면 활성화: 메모리에 올라감  
+> close 하면 비활성화: 메모리에서 해제가 되는 게 아님  
+> 📌 **일괄처리를 하기 때문에 효율을 높인다.**
+
+<br>
+
+> #### JNDI: Java Naming and Directory Interface
+> 쿼리를 따로 분리해놓는 파일에서 쿼리를 불러와서 실행할 때 **쿼리 이름을 사용**하는 것이 DataSource라는 객체이다.  
+> DataSource 도 자바에서 설정하는 게 아니라, **xml에서 태그로 설정**한다.  
+> DataSource 연결 정보가 있다.  
+> 어떤 DBMS를 쓸 건지 url 쓴다.  
+> **외부파일에 있는 객체를 찾아서 가지고 오는 기술이 JNDI**이다.
+
+<br>
+
+> #### sqlSession: sql을 전송해주고 관리해주는 것  
+> 이 객체로 메소드 사용하여 CRUD 한다.  
+> sqlSession, sqlSessionFactoryBuilder: 서버가 돌아가는 동시에 두 개가 메모리에 올라간다.  
+
+<br>
+
+📌 **sqlSession 객체에 있는 메소드**
+```
+select(selectOne, sele ctList)
+insert
+update
+delete
+```
+
+<br>
+
+> sqlSession을 만들기 위해서 연결 객체가 필요하다.
+> 연결에 대한 정보를 외부파일에 설정해두고 JNDI로 자바쪽으로 가지고 온다.
+
+<br>
+
+> #### Config: 연결 정보 관리 파일 
+> SessionFactoryBuilder가 sqlSessionFactory를 짓기 위해서는 설정파일이 필요하다.  
+> Config 파일에 연결 정보를 다 써둔다.  
+> SessionFactoryBuilder가 Config를 참조해서 sqlSessionFactory를 짓는다.  
+
+여기까지가 요청하기 전 단계  
+
+<br>
+
+> 요청하면 sqlSession이 만들어진다.  
+> 외부파일에 작성해둔 쿼리의 경로를 알려줘야 메소드 안에 그 쿼리를 작성해서 날려준다.  
+> 중복없는 값으로 쿼리의 이름을 만들어서 알려줘야 한다.  
+
+<br>
+
+> #### Mapper: 쿼리가 모여있는 파일
+> 아이디 설정해서 쿼리들을 작성해준다.  
+> sqlSession에서 Mapper를 가서 쿼리를 가지고 온 다음, sql을 실행한다.
+
+<br>
+
+📌 Mapper 또한 구분점이 필요하다. **mapper namespace="" 안에 적어준다.**
+
+<br>
+
+📌 **DB에서 테이블을 만들고 난 후, 해야 할 것**
+```
+1. VO
+필드설정
+2. Mapper.xml
+mapper namespace=""
+insert
+select
+update
+delete
+
+3. DAO
+method 안에 파라미터 설정해주고
+sqlSession.쿼리명(쿼리아이디,파라미터);
+
+끝
+```
+
+
+
+
+
+
+
+
 
 
 
