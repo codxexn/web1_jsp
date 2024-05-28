@@ -110,6 +110,22 @@ doGet, doPost 메소드를 재정의하면 request가 매개변수로 설정되�
 웹컨테이너에서는 httpservlet request라는 객체와 httpservlet response 라는 객체가 매개변수로 위치해있다. 근데 서버로 다시 보낼 때는 servlet이라는 단어가 붙으면 안된다. 서블릿의 역할은 다 끝났기 때문이다. 따라서 **웹서버로 갈 때는 http request, http response 라는 객체로 옮겨담아진다.** 
 #### ➡️ 웹서버에서 바로 응답할 수 있게 정제된 결과값이 된다는 것
 
+<br>
+
+> get방식은 url에 ? 뒤에 key=value 가 보인다.  
+> url에 담겨서 가기 때문에 길이에 제한이 있다.  
+> 길이가 긴 것은 post로 한다.  
+
+```java
+?name=이도은&age=20
+```
+
+> post는 request header 라는 저장공간에 키, 밸류로 저장돼서 전달되기 때문에 url에 보이지 않는다.  
+
+📌 **개발자모드, 네트워크, 전체, 페이로드에 들어가면 key, value 값이 다 보이기 때문에 비번과 같이 보안이 필요한 값은 submit함과 동시에 암호화를 해서 보내준다.**
+
+<br>
+
 ```java
 로그인
 사용자가 form에 아이디, 비번을 입력한다.
@@ -408,6 +424,24 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
 > action ="home" 은 /home으로 요청하겠다는 의미  
 > "/home"을 적으면 안된다.  
 > ContextPath까지 날아가고 서버 뒤에서 바로 /home으로 시작하기 때문이다. 그냥 home을 적어주어야 ContextPath 뒤에 /해서 home이 붙는다.
+
+<br>
+
+```java
+<servlet>
+  	<servlet-name>Intro</servlet-name>
+  	<jsp-file>/intro.jsp</jsp-file>
+</servlet>
+  
+<servlet-mapping>
+  	<servlet-name>Intro</servlet-name>
+  	<url-pattern>/intro</url-pattern>
+</servlet-mapping>
+```
+- jsp도 컴파일하면 서블릿이기 때문에 서블릿 매핑 작업이 된다.
+- /intro를 요청하면 Intro라는 변수에 담겨있는 /intro.jsp 경로의 jsp 파일을 실행해달라는 의미
+- /: WebContent까지의 경로를 의미
+
 
 <br>
 
